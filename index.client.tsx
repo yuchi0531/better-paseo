@@ -14,7 +14,7 @@ import { loadMark } from "./client/debug/load-marks";
 import { scheduleLoadTraceDump } from "./client/debug/load-trace";
 import { transformCompaction, transformToolCall } from "./client/tools/transform";
 import { agentMessageSchema } from "./client/tools/agent-message";
-import { assistantRows } from "./client/assistant-transform";
+import { assistantRows, hasGenuiFence } from "./client/assistant-transform";
 import { externalHistoryRows } from "./client/external-history";
 import { embeddedFontsRpc } from "./shared/font-rpc";
 import { markBitmapsRpc } from "./shared/mark-rpc";
@@ -169,6 +169,18 @@ export default function contribute(client: PluginClientContext) {
     Component: LiveTodoRenderer,
   });
 
+  // The Generative UI plugin follows up a broken ```ui block with a message to
+  // the agent that starts with `[genui]`. It is an internal nudge, not something
+  // the reader typed, so it leaves no row whatever the bubble preference is.
+  const removeGenuiRepairTransformer = addChatTransformer({
+    id: "omp-genui-repair-hide",
+    query: { itemType: "user_message" },
+    transform({ item }) {
+      if (item.type !== "user_message") return undefined;
+      return /^\s*\[genui\]/.test(item.text) ? { items: [] } : undefined;
+    },
+  });
+
   // Registered again when the preference changes, so prompts already
   // projected follow it (see `followPreference`).
   const removeUserTransformer = followPreference("enhancedUserBubble", () =>
@@ -181,6 +193,10 @@ export default function contribute(client: PluginClientContext) {
         // bubble would silently swallow a pasted screenshot. The preference lets
         // the reader trade the bubble for the host's image previews.
         if (!getEnhancerPreferences().enhancedUserBubble) return undefined;
+        // The Generative UI plugin follows up a broken ```ui block with a
+        // message to the agent that starts with `[genui]`. It is an internal
+        // nudge, not something the reader typed, so it leaves no row.
+        if (/^\s*\[genui\]/.test(item.text)) return { items: [] };
         const images = extractPromptImages(item);
         // Replacing the item drops whatever this renderer does not carry, so a
         // message with an attachment it cannot show is left to the host.
@@ -230,6 +246,10 @@ export default function contribute(client: PluginClientContext) {
         if (item.type !== "assistant_message") return undefined;
         if (!getEnhancerPreferences().assistantMarkdown) return undefined;
         if (!item.text.trim()) return undefined;
+        // A reply carrying ```ui / ```app blocks belongs to the Generative UI
+        // plugin: claiming it here would show the block as plain code and
+        // never let that plugin render it.
+        if (hasGenuiFence(item.text)) return undefined;
         return { items: externalHistoryRows(item.text, phase, item.messageId) ?? assistantRows(item.text, phase) };
       },
     }),
@@ -311,6 +331,7 @@ export default function contribute(client: PluginClientContext) {
     removeReasoningRenderer();
     removeTodoTransformer();
     removeTodoRenderer();
+    removeGenuiRepairTransformer();
     removeUserTransformer();
     removeUserRenderer();
     removeAssistantTransformer();

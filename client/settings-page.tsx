@@ -582,7 +582,7 @@ function useVersionCheck() {
 function VersionResult({ state, look, language, updateAvailable }: {
   state: Extract<ReturnType<typeof useVersionCheck>["state"], { state: "done" }>;
   look: PageLook;
-  language: "en" | "zh";
+  language: "en" | "zh" | "ja";
   updateAvailable: boolean;
 }) {
   const { t, tokens } = look;
@@ -607,7 +607,7 @@ function VersionResult({ state, look, language, updateAvailable }: {
   </View>;
 }
 
-function VersionSection({ look, language, version, autoUpdateCheck, native }: { look: PageLook; language: "en" | "zh"; version: ReturnType<typeof useVersionCheck>; autoUpdateCheck: boolean; native: boolean }) {
+function VersionSection({ look, language, version, autoUpdateCheck, native }: { look: PageLook; language: "en" | "zh" | "ja"; version: ReturnType<typeof useVersionCheck>; autoUpdateCheck: boolean; native: boolean }) {
   const { state, run } = version;
   const { copied, copy } = useCopy();
   const openTerminal = useRpc(openTerminalRpc);
@@ -769,6 +769,7 @@ export function BetterPaseoSettingsPage({ theme, layout, host }: PluginSurfacePr
                 { value: "system", label: t.languageSystem },
                 { value: "en", label: t.languageEnglish },
                 { value: "zh", label: t.languageChinese },
+                { value: "ja", label: t.languageJapanese },
               ]}
               onChange={(language) => updateEnhancerPreferences({ language })}
               look={look}

@@ -415,9 +415,226 @@ const zh: typeof en = {
   },
 };
 
+const ja: typeof en = {
+  /** The board's name: screen title, sidebar row, settings page. */
+  name: "Tasks",
+  /** The Command Center item. */
+  openBoard: "Tasksを開く",
+  lanes: { needs_input: "対応待ち", running: "実行中", review: "レビュー", done: "完了", archived: "アーカイブ済み" } as Record<LaneId, string>,
+  /** The phone's tabs: a quarter of 390 each. */
+  tabs: { needs_input: "対応待ち", running: "実行中", review: "レビュー", done: "完了", archived: "アーカイブ済み" } as Record<LaneId, string>,
+  laneEmpty: {
+    needs_input: "対応待ちのタスクはありません",
+    running: "実行中のタスクはありません",
+    review: "レビューするものはありません",
+    done: "この期間に完了したタスクはありません",
+    archived: "この期間にアーカイブされたタスクはありません",
+  } as Record<LaneId, string>,
+  laneEmptyHint: {
+    needs_input: "許可または回答が必要なタスクがここに表示されます",
+    running: "任意の workspace でタスクを開始すると、ここに表示されます",
+    review: "完了または失敗したタスクは、確認するまでここに表示されます",
+    done: "7日またはすべてに切り替えると、古いタスクを表示できます",
+    archived: "アーカイブされたタスクと、アーカイブされた workspace のタスクがここに表示されます。7日またはすべてに切り替えると、古いものを表示できます",
+  } as Record<LaneId, string>,
+  boardEmpty: "タスクはまだありません",
+  boardEmptyHint: "任意の workspace でタスクを開始すると、ステータス別にここに表示されます",
+  windows: { "24h": "24時間", "7d": "7日", all: "すべて" } as Record<DoneWindow, string>,
+  total: (count: number) => `${count} ${count === 1 ? "件" : "件"}`,
+  /** `total` without its number, for a count that rolls on its own. */
+  totalUnit: (count: number): string => (count === 1 ? "件" : "件"),
+  /** A lane's pill for new tasks out of view; it scrolls to the first. */
+  newTasks: (count: number) => `${count} 件の新しい${count === 1 ? "タスク" : "タスク"}`,
+  /** The phone tab's and the collapsed lane's dot. */
+  newTasksIn: (lane: string) => `${lane} の新しいタスク`,
+  search: "タスクを検索",
+  historyLoading: "古いタスクを読み込み中",
+  historyFailed: "古いタスクを読み込めませんでした",
+  cancelSearch: "検索を停止",
+  resumeSearch: "検索を再開",
+  searchStopped: "検索を停止しました。結果は不完全です",
+  fullConversationSearch: "全文検索",
+  fullConversationShort: "全文",
+  fullConversationHint: (on: boolean): string => on
+    ? "全文検索をオフにする\nタスクの詳細と最初のメッセージだけを検索します。"
+    : "全文検索をオンにする\n利用可能な会話内のメッセージと推論を検索します。結果はコンテンツの読み込みに合わせて表示されます。",
+  /** Shown when the switch is pressed, for the mode just entered. */
+  fullConversationToast: (on: boolean): string => on ? "全文検索はオンです" : "全文検索はオフです",
+  conversationSearchCoverage: {
+    unavailable: (count: number) => `${count} 件未検索`,
+    failed: (count: number) => `${count} 件失敗`,
+    retrying: (count: number) => `${count} 件を再試行中…`,
+    retry: "再試行",
+    title: "会話の全文検索",
+    close: "外側をタップして閉じる",
+    reading: (count: number) => `${count} 件を検索中…`,
+    readingHint: "メッセージと推論はページごとに検索されます。一致が見つかると結果が表示されます。",
+    unavailableHint: "終了したセッション、存在しない作業ディレクトリ、利用できない provider はスキップされます。読み込まれたすべてのタスクのメタデータは引き続き検索されます。",
+    failedHint: "再試行は失敗した会話だけを検索します。検索条件は保持されます。",
+    tip: (count: number) => `${count} 件のタスクの会話を検索中`,
+    started: "会話の全文を検索中",
+    complete: (results: number, unavailable: number, failed: number) => `検索完了、${results} 件の結果。${unavailable} 件の会話は未検索、${failed} 件失敗。`,
+  },
+  searchCoverage: {
+    unavailable: (count: number) => `${count} 件未検索`,
+    failed: (count: number) => `${count} 件失敗`,
+    retrying: (count: number) => `${count} 件を再試行中…`,
+    retry: "再試行",
+    title: "最初のメッセージの検索",
+    close: "外側をタップして閉じる",
+    reading: (count: number) => `${count} 件を読み込み中…`,
+    readingHint: "メッセージの読み込みに合わせて結果が更新されます。",
+    unavailableHint: "メッセージがキャッシュされておらず、セッションが終了しているか、作業ディレクトリが存在しないか、provider が利用できません。終了したセッションは起動されません。タイトル、プロジェクト、branch、パス、タグ、model、PR、ID が検索されました。",
+    failedHint: "再試行はこれらのメッセージだけを再読み込みします。検索条件は保持されます。",
+    tip: (count: number) => `${count} 件のタスクの最初のメッセージを読み込み中`,
+    started: "最初のメッセージを検索中",
+    complete: (results: number, unavailable: number, failed: number) => `検索完了、${results} 件の結果。${unavailable} 件のタスクは最初のメッセージで未検索、${failed} 件失敗。`,
+  },
+  searchButton: "検索",
+  project: "プロジェクト",
+  workspace: "Workspace",
+  agent: "Agent",
+  labels: "ラベル",
+  /** The applied filter's chip. */
+  hideSubtasks: "サブタスクを非表示",
+  /** The board's switch: on shows every subtask. */
+  showSubtasks: "サブタスクを表示",
+  showSubtasksHint: "オフの場合でも、実行中、待機中、失敗したサブタスクは表示されます（親のカードが同じレーンにある場合を除く）",
+  searchContains: "含む",
+  doneWindowLabel: "完了",
+  clear: "クリア",
+  clearAll: "すべてクリア",
+  /** Several picks of one filter folded into one chip: "2 projects and 1 workspace selected". */
+  selected: (parts: string[]) => `${parts.join(" と ")} を選択中`,
+  selectedUnits: {
+    project: (count: number) => `${count} ${count === 1 ? "プロジェクト" : "プロジェクト"}`,
+    workspace: (count: number) => `${count} ${count === 1 ? "workspace" : "workspace"}`,
+    label: (count: number) => `${count} ${count === 1 ? "ラベル" : "ラベル"}`,
+    agent: (count: number) => `${count} ${count === 1 ? "Agent" : "Agent"}`,
+  },
+  keys: { move: "移動", lane: "レーン", open: "開く", space: "スペース", preview: "プレビュー", search: "検索" },
+  collapse: "レーンを折りたたむ",
+  expand: "レーンを展開",
+  emptyLanes: { collapse: "空のレーンを折りたたむ", expand: "空のレーンを展開" },
+  loadMore: "さらに読み込む",
+  loading: "読み込み中",
+  shown: (count: number) => `${count} 件を表示中`,
+  filters: "フィルター",
+  more: "その他",
+  refreshTasks: "タスクを更新",
+  scrollBottom: "一番下へスクロール",
+  /** A lane with more pages to load: the shortcut reaches the loaded cards' end. */
+  scrollLoadedEnd: "読み込まれたタスクの末尾へスクロール",
+  view: "表示",
+  reset: "リセット",
+  /** The phone sheet folds the workspaces without an active task under this. */
+  show: (count: number) => `${count} ${count === 1 ? "件のタスク" : "件のタスク"}を表示`,
+  timeRange: "範囲",
+  doneRange: "期間",
+  clearFilters: "フィルターをクリア",
+  hiddenByFilters: "現在のフィルターで非表示",
+  /** Under a lane's cards while the filters leave some of its own out; the filters follow on a second line. */
+  laneHidden: (count: number) => `${count} 件がフィルターで非表示`,
+  noOptions: "フィルターできる項目はまだありません",
+  /** The search field atop the project and workspace menus. */
+  menuSearch: { placeholder: "検索", clear: "検索をクリア", empty: "一致なし" },
+  /** The search field atop the phone sheet's workspaces. */
+  sheetSearch: "プロジェクトと workspace を検索",
+  details: "詳細",
+  stoppedManually: "手動で停止",
+  closeMenu: "メニューを閉じる",
+  sort: "並べ替え",
+  sortDefault: "既定の順序",
+  /** The filter bar's lane width menu; the choice is the Tasks setting, so every client of the host follows it. */
+  laneWidth: {
+    title: "レーン幅",
+    /** Short heading beside the toolbar's inline width choices. */
+    label: "レーン幅",
+    /** Read out for the filter-bar button, which shows only the width's name. */
+    button: (name: string) => `レーン · ${name}`,
+    names: { narrow: "狭い", default: "既定", wide: "広い" } as Record<LaneWidth, string>,
+    saveFailed: "レーン幅を保存できませんでした",
+  },
+  archivedLane: {
+    /** The round Archive button's hint, in the filter bar beside the done window. */
+    hint: "完了の後にアーカイブ済みレーンを表示",
+    /** The round Archive button's name, in the filter bar and the phone and narrow board headers. */
+    row: "アーカイブ済みレーンを表示",
+    saveFailed: "アーカイブ済みレーンの設定を保存できませんでした",
+    /** A toast when an archived task is asked to open: Paseo would show another tab. */
+    cannotOpen: "Paseo で開くには、このタスクのアーカイブを解除してください",
+  },
+  emptyGroups: {
+    /** The round switch's name, in the filter bar and the phone and narrow board headers. */
+    row: "すべて表示",
+    show: "空のグループを表示",
+    hide: "空のグループを非表示",
+    sheetLabel: (on: boolean): string => (on ? "すべて表示" : "タスクのあるグループを表示"),
+    hint: (on: boolean): string => (on ? "ボードにタスクがないグループも含みます" : "ボードにタスクがないグループを非表示にします"),
+    saveFailed: "空のグループ設定を保存できませんでした",
+  },
+  /** The desktop bars' hover tips, shown under a control a pointer rests on. */
+  tips: {
+    project: "プロジェクトでフィルター",
+    workspace: "workspace でフィルター",
+    agent: "Agent でフィルター",
+    labels: "ラベルでフィルター",
+    hideSubtasks: "サブタスクを非表示",
+    doneWindow: "完了とアーカイブ済みをどこまでさかのぼるか",
+    hideArchived: "アーカイブ済みレーンを非表示",
+    sort: "各レーンのカードを並べ替え",
+  },
+  back: "戻る",
+  sortKeys: {
+    workspace: "Workspace",
+    project: "プロジェクト",
+    branch: "branch",
+    folder: "フォルダー",
+    title: "タイトル",
+    created: "作成日",
+    updated: "更新日",
+    context: "Context",
+    duration: "所要時間",
+  } as Record<SortKey, string>,
+  sortOrders: {
+    name: { asc: "A\u2192Z", desc: "Z\u2192A" },
+    time: { asc: "古い順", desc: "新しい順" },
+    amount: { asc: "低\u2192高", desc: "高\u2192低" },
+    length: { asc: "短い順", desc: "長い順" },
+  } as Record<"name" | "time" | "amount" | "length", Record<SortDirection, string>>,
+  sortedAmong: (count: number) => `読み込まれた ${count} 件の中で並べ替え`,
+  boardOff: "Tasks ボードはオフです",
+  boardOffHint: "Better Paseo の設定にある Tasks ボードでオンにすると、ここでステータス別にタスクを確認できます",
+  openSettings: "設定を開く",
+  settings: "設定",
+  answerFailed: (message: string) => `回答できませんでした: ${message}`,
+  sidebar: {
+    key: "サイドバー",
+    resize: "サイドバー幅を調整",
+    show: "サイドバーを表示",
+    hide: "サイドバーを非表示",
+    close: "閉じる",
+    sheetGrow: "詳細を展開",
+    sheetShrink: "詳細を折りたたむ",
+    previous: "前のタスク",
+    next: "次のタスク",
+    back: (title: string) => `${title} に戻る`,
+    groups: { agent: "Agent", project: "プロジェクト", workspace: "Workspace", label: "ラベル" } as Record<"agent" | "project" | "workspace" | "label", string>,
+    noGroups: "グループ化できる項目はまだありません",
+    noLabel: "ラベルなし",
+    stopRun: "停止",
+    openTab: "開く",
+    archived: "アーカイブ済み · ボードから削除済み",
+    hidden: "現在のフィルターで非表示",
+    deleted: "タスクは削除されました",
+    searchMatches: "検索一致",
+    property: { project: "プロジェクト", parent: "親", branch: "branch", cwd: "ディレクトリ", pr: "PR", labels: "ラベル" },
+  },
+};;
+
 export type BoardStrings = typeof en;
 
-export const BOARD_STRINGS: Readonly<Record<TasksLanguage, BoardStrings>> = { en, zh };
+export const BOARD_STRINGS: Readonly<Record<TasksLanguage, BoardStrings>> = { en, zh, ja };
 
 /** The icon of a phone lane's empty state (prototype 04). */
 export const LANE_EMPTY_ICON: Readonly<Record<LaneId, string>> = {

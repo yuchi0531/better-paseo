@@ -32,7 +32,7 @@ const changeListeners = new Set<() => void>();
  */
 export function resolveTasksLanguage(): TasksLanguage {
   const preference = getEnhancerPreferences().language;
-  const next = preference === "en" || preference === "zh" ? preference : hostLanguage();
+  const next = preference === "en" || preference === "zh" || preference === "ja" ? preference : hostLanguage();
   if (current !== null && next !== current) {
     void Promise.resolve().then(() => {
       for (const listener of [...changeListeners]) listener();

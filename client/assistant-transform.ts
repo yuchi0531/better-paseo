@@ -3,6 +3,21 @@ import { parseSystemEnvelope } from "./system-envelope";
 import { lexBlockTokens } from "./components/markdown/lex";
 import type { Tokens } from "./vendor/marked";
 
+/**
+ * A fence line that opens a ```ui or ```app block (genui's inline components).
+ * The Generative UI plugin reads those blocks in its own assistant-message
+ * transformer; a plugin that claims the message first would leave the code
+ * visible instead, so this reply is left to that plugin.
+ */
+const GENUI_FENCE = /^ {0,3}(?:`{3,}|~{3,})\s*(?:ui|app)(?:\s|$)/i;
+
+export function hasGenuiFence(text: string): boolean {
+  for (const line of text.split("\n")) {
+    if (GENUI_FENCE.test(line)) return true;
+  }
+  return false;
+}
+
 export interface AssistantRowData {
   text: string;
   phase?: string;

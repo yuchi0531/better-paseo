@@ -479,7 +479,9 @@ export function shownSubagents(subagents: readonly ProviderSubagent[] | undefine
 }
 
 function subagentError(count: number): string {
-  if (resolveTasksLanguage() === "zh") return `${count} 个 subagent 失败`;
+  const lang = resolveTasksLanguage();
+  if (lang === "zh") return `${count} 个 subagent 失败`;
+  if (lang === "ja") return `${count} 件のサブエージェントが失敗`;
   return count === 1 ? "1 subagent failed" : `${count} subagents failed`;
 }
 
@@ -776,7 +778,7 @@ function buildBaseCard(
   return {
     id: agent.id,
     scheduled: !!agent.labels?.["paseo.schedule-id"],
-    title: agent.title?.trim() || (resolveTasksLanguage() === "zh" ? "未命名" : "Untitled"),
+    title: agent.title?.trim() || (resolveTasksLanguage() === "zh" ? "未命名" : resolveTasksLanguage() === "ja" ? "無題" : "Untitled"),
     lane: classification.lane,
     status: classification.status,
     provider: agent.provider,
@@ -2992,7 +2994,7 @@ function createStore(api: PaseoApi): TaskStore {
     scheduleSubagents(0);
     timer = setTimeout(() => {
       timer = null;
-      subscriptionError(new Error(resolveTasksLanguage() === "zh" ? "刷新任务超时" : "Refreshing tasks timed out"));
+      subscriptionError(new Error(resolveTasksLanguage() === "zh" ? "刷新任务超时" : resolveTasksLanguage() === "ja" ? "タスクの更新がタイムアウトしました" : "Refreshing tasks timed out"));
       cancelRefresh("failed");
     }, REFRESH_TIMEOUT_MS);
     // A list that lands keeps its place; one that fails leaves the old list live.
@@ -3177,7 +3179,9 @@ export function filterLanes(lanes: Record<LaneId, LaneModel>, filters: BoardFilt
   const keep = (card: TaskCard) => {
     if (!matches(card)) return false;
     // A detached card's former parent is history: it is a task of its own.
-    if (!filters.hideSubtasks || card.parent === null || card.parent.detached) return true;
+    // A provider subagent (Claude's Agent tool, DSH's child sessions) is its
+    // own unit too, so the subtask toggle never folds it away.
+    if (!filters.hideSubtasks || card.parent === null || card.parent.detached || card.subagent !== undefined) return true;
     if (card.status !== "running" && card.status !== "needs_input" && card.status !== "failed") return false;
     // A parent left on the board shows it as a row, or its own parent does.
     const parent = byId.get(card.parent.id);

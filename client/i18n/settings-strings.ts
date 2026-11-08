@@ -11,10 +11,10 @@
  * (`toolbar-strings.ts`): the chat itself shows the model's and the tools'
  * own words.
  */
-import { deviceLocales, hostLanguage, isChineseLocale } from "./host-language";
+import { deviceLocales, hostLanguage, isChineseLocale, isJapaneseLocale } from "./host-language";
 
-export type SettingsLanguagePreference = "system" | "en" | "zh";
-export type SettingsLanguage = "en" | "zh";
+export type SettingsLanguagePreference = "system" | "en" | "zh" | "ja";
+export type SettingsLanguage = "en" | "zh" | "ja";
 
 /** The device locale, e.g. `zh-CN`, or null where the runtime exposes none. */
 export function systemLanguage(): string | null {
@@ -29,8 +29,10 @@ export function systemLanguage(): string | null {
 export function resolveLanguage(preference: SettingsLanguagePreference, locale?: string | null): SettingsLanguage {
   if (preference !== "system") return preference;
   if (locale === undefined) return hostLanguage();
-  return isChineseLocale(locale) ? "zh" : "en";
+  if (isChineseLocale(locale)) return "zh";
+  if (isJapaneseLocale(locale)) return "ja";
+  return "en";
 }
 
 /** The settings screen's title, which the host lists before the page itself loads. */
-export const SETTINGS_SCREEN_TITLES: Readonly<Record<SettingsLanguage, string>> = { en: "Settings", zh: "设置" };
+export const SETTINGS_SCREEN_TITLES: Readonly<Record<SettingsLanguage, string>> = { en: "Settings", zh: "设置", ja: "設定" };

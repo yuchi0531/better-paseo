@@ -62,7 +62,7 @@ export function nameCompare(language: TasksLanguage, intl: IntlLike | undefined 
   const Collator = intl?.Collator;
   if (typeof Collator === "function") {
     try {
-      const locales = language === "zh" ? ["zh-Hans-u-co-pinyin", "zh"] : ["en"];
+      const locales = language === "zh" ? ["zh-Hans-u-co-pinyin", "zh"] : language === "ja" ? ["ja"] : ["en"];
       return new Collator(locales, { numeric: true, sensitivity: "base" }).compare;
     } catch {
       // An unsupported locale or option: fall through.

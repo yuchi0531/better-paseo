@@ -325,7 +325,7 @@ export function TaskDetailCards(given: TaskDetailCardsProps) {
       } : undefined}>
         <View accessibilityRole="tablist" testID="detail-tabs" style={{ flexDirection: "row", paddingHorizontal: 10, paddingTop: props.scrollHeader ? 8 : 0, paddingBottom: 8, gap: 6, backgroundColor: tokens.card.background, boxShadow: tabShadow }}>
           {(["info", "messages"] as const).map((id) => (
-            <DetailTab key={id} id={id} selected={tab === id} tokens={tokens} touch={props.touch === true} label={`${id === "info" ? (props.language === "zh" ? "基本信息" : "Info") : (props.language === "zh" ? "消息" : "Messages")}${(id === "messages" && matching.includes("prompt")) || (id === "info" && matching.includes("properties")) ? " ·" : ""}`} onPress={() => {
+            <DetailTab key={id} id={id} selected={tab === id} tokens={tokens} touch={props.touch === true} label={`${id === "info" ? (props.language === "zh" ? "基本信息" : props.language === "ja" ? "基本情報" : "Info") : (props.language === "zh" ? "消息" : props.language === "ja" ? "メッセージ" : "Messages")}${(id === "messages" && matching.includes("prompt")) || (id === "info" && matching.includes("properties")) ? " ·" : ""}`} onPress={() => {
               if (id === tab) return;
               // Switching pages must not reveal a header the reader already scrolled past.
               if (props.scrollHeader) tabOffsets.current[id] = Math.max(tabOffsets.current[id], Math.min(tabOffsets.current[tab], tabLayout.top));
@@ -458,7 +458,7 @@ function PendingQuestions({ card, tokens, language }: { card: TaskCard; tokens: 
   const questions = card.lane === "needs_input" ? card.permission?.questions : undefined;
   if (!questions?.length) return null;
   return <View testID="detail-pending-questions" style={{ paddingHorizontal: 12, paddingVertical: 12, gap: 12 }}>
-    <Text style={{ fontSize: F.sm, fontWeight: "600", color: tokens.foreground }}>{language === "zh" ? "待回答问题" : "Questions awaiting an answer"}</Text>
+    <Text style={{ fontSize: F.sm, fontWeight: "600", color: tokens.foreground }}>{language === "zh" ? "待回答问题" : language === "ja" ? "回答待ちの質問" : "Questions awaiting an answer"}</Text>
     {questions.map((question, index) => <View key={index} testID="detail-pending-question" style={{ gap: 16, padding: 12, borderWidth: 1, borderColor: tokens.border, borderRadius: 8, backgroundColor: tokens.surface1 }}>
       <Text style={{ fontSize: F.base, color: tokens.foreground }}>{question.question}</Text>
       {question.options.map((option, optionIndex) => <View key={optionIndex} testID="detail-pending-option" style={{ flexDirection: "row", alignItems: "flex-start", gap: 8 }}>

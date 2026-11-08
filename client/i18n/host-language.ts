@@ -32,10 +32,14 @@ import {
   type SettingsPair,
 } from "../ui/tokens/host-appearance-shim";
 
-export type HostLanguage = "en" | "zh";
+export type HostLanguage = "en" | "zh" | "ja";
 
 /** Languages the host translates besides Chinese (`REGIONAL_LANGUAGE_LOCALES`, pt-BR). */
-const HOST_OTHER_LANGUAGES = new Set(["ar", "en", "es", "fr", "ja", "ko", "ru", "pt"]);
+const HOST_OTHER_LANGUAGES = new Set(["ar", "en", "es", "fr", "ko", "ru", "pt"]);
+
+export function isJapaneseLocale(locale: string | null | undefined): boolean {
+  return typeof locale === "string" && /^ja(?:[-_]|$)/i.test(locale);
+}
 
 export function isChineseLocale(locale: string | null | undefined): boolean {
   return typeof locale === "string" && /^zh(?:[-_]|$)/i.test(locale);
@@ -48,11 +52,16 @@ export function isChineseLocale(locale: string | null | undefined): boolean {
  * translates, else English.
  */
 export function pickHostLanguage(setting: unknown, locales: readonly string[] | string | null | undefined): HostLanguage {
-  if (setting !== undefined && setting !== null && setting !== "system") return isChineseLocale(String(setting)) ? "zh" : "en";
+  if (setting !== undefined && setting !== null && setting !== "system") {
+    if (isChineseLocale(String(setting))) return "zh";
+    if (isJapaneseLocale(String(setting))) return "ja";
+    return "en";
+  }
   const list = typeof locales === "string" ? [locales] : (locales ?? []);
   for (const locale of list) {
     if (typeof locale !== "string" || !locale) continue;
     if (isChineseLocale(locale)) return "zh";
+    if (isJapaneseLocale(locale)) return "ja";
     if (HOST_OTHER_LANGUAGES.has(locale.toLowerCase().split(/[-_]/, 1)[0] ?? "")) return "en";
   }
   return "en";

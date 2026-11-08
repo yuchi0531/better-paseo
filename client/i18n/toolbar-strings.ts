@@ -142,11 +142,166 @@ const ZH: Readonly<Record<string, string>> = {
   "Open Markdown in a window": "在窗口中打开 Markdown",
   "Render Markdown": "渲染 Markdown",
   "Show raw text": "显示原始文本",
+}
+
+const JA: Readonly<Record<string, string>> = {
+  "Compacting context": "コンテキストを圧縮中",
+  "Compacted context": "コンテキストを圧縮しました",
+  manual: "手動",
+  "Task finished": "タスク完了",
+  "Command finished": "コマンド完了",
+  "Subtask finished": "サブタスク完了",
+  "Load tools": "ツールを読み込む",
+  "Sending message": "メッセージを送信中",
+  Schedule: "スケジュール",
+  "Terminal input": "ターミナル入力",
+  Plan: "プラン",
+  Monitor: "監視",
+  "Needs answer": "回答待ち",
+  Allowed: "許可済み",
+  "Checking status": "ステータスを確認中",
+  "Listing agents": "Agent一覧を表示中",
+  "Checking permissions": "権限を確認中",
+  "Canceling turn": "ターンをキャンセル中",
+  "Closing agent": "Agentを閉じています",
+  Archiving: "アーカイブ中",
+  "Setting mode": "モードを設定中",
+  "Running subtask": "サブタスクを実行中",
+  Creating: "作成中",
+  "Sending prompt": "プロンプトを送信中",
+  "Listing providers": "プロバイダー一覧を表示中",
+  "Listing profiles": "プロファイル一覧を表示中",
+  Copy: "コピー",
+  "Copy selected": "選択範囲をコピー",
+  Copied: "コピーしました",
+  "Copied instead": "代わりにコピーしました",
+  "Add to chat": "チャットに追加",
+  Added: "追加しました",
+  "Couldn't copy": "コピーできませんでした",
+  "Copy path": "パスをコピー",
+  "Copy branch name": "ブランチ名をコピー",
+  "Copy label name": "ラベル名をコピー",
+  "Copy folder name": "フォルダ名をコピー",
+  "Copy URL": "URLをコピー",
+  "Copy command": "コマンドをコピー",
+  "Copy output": "出力をコピー",
+  "Copy command and output": "コマンドと出力をコピー",
+  "Copy file content": "ファイルの内容をコピー",
+  "Copy patch": "パッチをコピー",
+  "Copy new content": "新しい内容をコピー",
+  "Copy query": "クエリをコピー",
+  "Copy file list": "ファイル一覧をコピー",
+  "Copy result": "結果をコピー",
+  "Copy arguments": "引数をコピー",
+  "Copy code": "コードをコピー",
+  "Copy Markdown table": "Markdownテーブルをコピー",
+  "Copy as Markdown": "Markdownとしてコピー",
+  "Copy as image": "画像としてコピー",
+  "Copy log": "ログをコピー",
+  "Copy description": "説明をコピー",
+  "Copy thought": "思考をコピー",
+  "Copy section": "セクションをコピー",
+  "Copy reply": "返信をコピー",
+  "Copy title": "タイトルをコピー",
+  "Copy session ID": "セッションIDをコピー",
+  "Copy workspace name": "ワークスペース名をコピー",
+  "Copy project name": "プロジェクト名をコピー",
+  "Open details": "詳細を開く",
+  "Expand in timeline": "タイムラインで展開",
+  "Collapse in timeline": "タイムラインで折りたたむ",
+  "View image": "画像を表示",
+  "Zoom in": "ズームイン",
+  "Zoom out": "ズームアウト",
+  "Reset zoom": "ズームをリセット",
+  "Open in default app": "デフォルトアプリで開く",
+  "Close the image": "画像を閉じる",
+  "Close menu": "メニューを閉じる",
+  Code: "コード",
+  running: "実行中",
+  completed: "完了",
+  failed: "失敗",
+  Thinking: "思考中",
+  Thought: "思考",
+  Completed: "完了",
+  "Previous block": "前のブロック",
+  "Next block": "次のブロック",
+  "Close details": "詳細を閉じる",
+  "Full screen": "全画面",
+  "Exit full screen": "全画面を終了",
+  "Widen panel": "パネルを広げる",
+  "Restore panel width": "パネル幅を復元",
+  "Expand details": "詳細を展開",
+  "Shrink details": "詳細を縮小",
+  "Resize details panel": "詳細パネルのサイズを変更",
+  "{count} new lines": "{count}行追加",
+  "Open in panel": "パネルで開く",
+  More: "その他",
+  "Back to latest": "最新に戻る",
+  "Text size": "文字サイズ",
+  "Decrease text size": "文字サイズを小さく",
+  "Increase text size": "文字サイズを大きく",
+  Reset: "リセット",
+  Streaming: "ストリーミング中",
+  "Copy model name": "モデル名をコピー",
+  Agent: "Agent",
+  "Model name": "モデル名",
+  "Turn details": "ターンの詳細",
+  "Start time": "開始時刻",
+  "End time": "終了時刻",
+  "Copy agent": "Agentをコピー",
+  "Copy thinking level": "思考レベルをコピー",
+  "Copy start time": "開始時刻をコピー",
+  "Copy end time": "終了時刻をコピー",
+  "Thinking level": "思考レベル",
+  "Elapsed time": "経過時間",
+  Input: "入力",
+  Cached: "キャッシュ済み",
+  Output: "出力",
+  "Not recorded": "記録なし",
+  "Copy prompt": "プロンプトをコピー",
+  "Previous operation": "前の操作",
+  "Next operation": "次の操作",
+  "Previous question": "前の質問",
+  "Next question": "次の質問",
+  "Show raw data": "生データを表示",
+  "Show questions": "質問を表示",
+  "Select one": "1つ選択",
+  "Free text": "自由入力",
+  Dismissed: "閉じました",
+  "Select multiple": "複数選択",
+  Answer: "回答",
+  Response: "応答",
+  "Waiting for answer…": "回答待ち…",
+  "No answer recorded": "回答は記録されていません",
+  "Wrap lines": "行を折り返す",
+  "Do not wrap lines": "行を折り返さない",
+  "Maximize preview": "プレビューを最大化",
+  "Close preview": "プレビューを閉じる",
+  "Open tasks in a window": "タスクをウィンドウで開く",
+  "Open Markdown in a window": "Markdownをウィンドウで開く",
+  "Render Markdown": "Markdownをレンダリング",
+  "Show raw text": "生テキストを表示",
 };
+
+;
 
 /** A button's English label as the reader's chosen language shows it; an unknown label stays English. */
 export function toolbarLabel(label: string, preference: SettingsLanguagePreference, locale?: string | null): string {
-  if (resolveLanguage(preference, locale) !== "zh") return label;
+  const language = resolveLanguage(preference, locale);
+  if (language === "ja") {
+    const latestCountJa = /^Back to latest\s*[\u00B7,]\s*(\d+) new lines?$/.exec(label);
+    if (latestCountJa) return `最新に戻る · 新規 ${latestCountJa[1]} 行`;
+    const newLinesJa = /^(\d+) new lines?$/.exec(label);
+    if (newLinesJa) return `${newLinesJa[1]} 行の新規出力`;
+    const stepsJa = /^(\d+) steps?$/.exec(label);
+    if (stepsJa) return `${stepsJa[1]} ステップ`;
+    const tokensJa = /^from (\d+(?:\.\d+)?[KM]?) tokens$/.exec(label);
+    if (tokensJa) return `圧縮前 ${tokensJa[1]} tokens`;
+    const wakeupJa = /^Wake up in (\d+(?:s|m|h)(?: \d+m)?)$/.exec(label);
+    if (wakeupJa) return `${wakeupJa[1]} 後に起動`;
+    return JA[label] ?? label;
+  }
+  if (language !== "zh") return label;
   const latestCount = /^Back to latest\s*[\u00B7,]\s*(\d+) new lines?$/.exec(label);
   if (latestCount) return `回到最新 · ${latestCount[1]} 行新输出`;
   // "1 new line", "5 new lines"; the pill's template is "{count} new lines" (`backToLatestText`).
@@ -169,11 +324,18 @@ export function toolbarLabel(label: string, preference: SettingsLanguagePreferen
  */
 export function copiedToast(label: string, preference: SettingsLanguagePreference, locale?: string | null): string {
   const base = label.replace(/^\d+\.\s*/, "");
+  const language = resolveLanguage(preference, locale);
   if (base.startsWith("Copy model name: ")) {
     const name = base.slice("Copy model name: ".length);
-    return resolveLanguage(preference, locale) === "zh" ? `已复制模型名称：${name}` : `Copied model name: ${name}`;
+    if (language === "zh") return `已复制模型名称：${name}`;
+    if (language === "ja") return `モデル名をコピーしました: ${name}`;
+    return `Copied model name: ${name}`;
   }
-  if (resolveLanguage(preference, locale) === "zh") {
+  if (language === "ja") {
+    const copied = /^Copy (.+)$/.exec(base);
+    return copied ? `${copied[1]} をコピーしました` : "コピーしました";
+  }
+  if (language === "zh") {
     const zh = ZH[base];
     return zh?.startsWith("复制") ? `已${zh}` : "已复制";
   }

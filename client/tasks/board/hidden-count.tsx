@@ -12,12 +12,12 @@ import { taskTokens } from "../cards/tokens";
 const noop = () => {};
 
 /** The settings preview's one hidden task: a real card, so the dialog draws the board's cell. */
-export function hiddenExampleCard(language: "en" | "zh"): TaskCard {
+export function hiddenExampleCard(language: "en" | "zh" | "ja"): TaskCard {
   const now = new Date(0).toISOString();
-  const workspace = language === "zh" ? "示例工作区" : "Example workspace";
+  const workspace = language === "zh" ? "示例工作区" : language === "ja" ? "サンプルワークスペース" : "Example workspace";
   return {
     id: "example",
-    title: language === "zh" ? "示例任务" : "Example task",
+    title: language === "zh" ? "示例任务" : language === "ja" ? "サンプルタスク" : "Example task",
     lane: "needs_input",
     status: "needs_input",
     provider: "claude",
@@ -57,17 +57,17 @@ export function hiddenExampleCard(language: "en" | "zh"): TaskCard {
 }
 
 /** Tasks the board's filters leave out of the sidebar counts. Each one is the board's own card. */
-export function HiddenCount({ tasks, theme, language, fields, compact = false, hostId }: { tasks: readonly TaskCard[]; theme: PluginTheme; language: "en" | "zh"; fields: CardSettings; compact?: boolean; hostId?: string }) {
+export function HiddenCount({ tasks, theme, language, fields, compact = false, hostId }: { tasks: readonly TaskCard[]; theme: PluginTheme; language: "en" | "zh" | "ja"; fields: CardSettings; compact?: boolean; hostId?: string }) {
   const [open, setOpen] = useState(false);
   const [collapsed, setCollapsed] = useState<Set<string>>(() => new Set());
-  const title = language === "zh" ? "被隐藏的任务" : "Hidden tasks";
+  const title = language === "zh" ? "被隐藏的任务" : language === "ja" ? "非表示のタスク" : "Hidden tasks";
   const groups = (["needs_input", "running", "review"] as const).map((lane) => ({
     lane,
-    label: language === "zh" ? { needs_input: "待输入", running: "运行中", review: "待查看" }[lane] : { needs_input: "Waiting", running: "Running", review: "Review" }[lane],
+    label: language === "zh" ? { needs_input: "待输入", running: "运行中", review: "待查看" }[lane] : language === "ja" ? { needs_input: "入力待ち", running: "実行中", review: "レビュー待ち" }[lane] : { needs_input: "Waiting", running: "Running", review: "Review" }[lane],
     tasks: tasks.filter((task) => task.lane === lane),
   })).filter((group) => group.tasks.length > 0);
   const names = groups.map((group) => `${group.label} (${group.tasks.length})\n${group.tasks.map((task) => task.title).join("\n")}`).join("\n\n");
-  const label = language === "zh" ? `${tasks.length} 个被隐藏的任务` : `${tasks.length} hidden ${tasks.length === 1 ? "task" : "tasks"}`;
+  const label = language === "zh" ? `${tasks.length} 个被隐藏的任务` : language === "ja" ? `${tasks.length} 件の非表示タスク` : `${tasks.length} hidden ${tasks.length === 1 ? "task" : "tasks"}`;
   const dot = statusMarkSize(14) / 2;
   const anchor = useRef<View>(null);
   useLayoutEffect(() => {
@@ -84,7 +84,7 @@ export function HiddenCount({ tasks, theme, language, fields, compact = false, h
     </Pressable>
     {open ? <Modal title={title} open onOpenChange={setOpen}>
       <Modal.Content scrollable contentContainerStyle={{ gap: 16 }}>
-        <Text style={{ color: theme.colors.foregroundMuted }}>{language === "zh" ? "当前筛选或搜索隐藏了以下任务。" : "The current filters or search hide these tasks."}</Text>
+        <Text style={{ color: theme.colors.foregroundMuted }}>{language === "zh" ? "当前筛选或搜索隐藏了以下任务。" : language === "ja" ? "現在のフィルタまたは検索で次のタスクが非表示になっています。" : "The current filters or search hide these tasks."}</Text>
         {groups.map((group) => <View key={group.lane} testID={`hidden-tasks-${group.lane}`} style={{ gap: 8 }}>
           <Pressable testID={`hidden-tasks-toggle-${group.lane}`} accessibilityRole="button" accessibilityLabel={`${group.label} · ${group.tasks.length}`} accessibilityState={{ expanded: !collapsed.has(group.lane) }} onPress={() => setCollapsed((previous) => {
             const next = new Set(previous);

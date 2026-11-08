@@ -149,14 +149,15 @@ export function sidebarCountParts(
   return all.filter((part) => part.count > 0);
 }
 
-const SIDEBAR_COUNT_TEXT: Record<"en" | "zh", Record<SidebarCountPart["lane"], (count: number) => string>> = {
+const SIDEBAR_COUNT_TEXT: Record<"en" | "zh" | "ja", Record<SidebarCountPart["lane"], (count: number) => string>> = {
   en: { needs_input: (n) => `${n} need input`, running: (n) => `${n} running`, review: (n) => `${n} to review` },
   zh: { needs_input: (n) => `${n} 个待输入`, running: (n) => `${n} 个运行中`, review: (n) => `${n} 个待查看` },
+  ja: { needs_input: (n) => `${n} 件が入力待ち`, running: (n) => `${n} 件が実行中`, review: (n) => `${n} 件がレビュー待ち` },
 };
 
 /** The counts as the row's accessibility text, "" when nothing shows. */
-export function sidebarCountText(parts: readonly SidebarCountPart[], language: "en" | "zh"): string {
-  return parts.map((part) => SIDEBAR_COUNT_TEXT[language][part.lane](part.count)).join(language === "zh" ? "，" : ", ");
+export function sidebarCountText(parts: readonly SidebarCountPart[], language: "en" | "zh" | "ja"): string {
+  return parts.map((part) => SIDEBAR_COUNT_TEXT[language][part.lane](part.count)).join(language === "zh" ? "，" : language === "ja" ? "、" : ", ");
 }
 
 /** The desktop lanes' geometry: Linear-style panels on the board's background. */

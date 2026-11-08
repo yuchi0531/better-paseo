@@ -48,7 +48,7 @@ import { OpenTasksShortcut } from "./open-shortcut";
 const options = <Value extends string>(values: readonly Value[], labels: Record<Value, string>) =>
   values.map((value) => ({ value, label: labels[value] }));
 
-function useStrings(): { strings: TasksSettingsStrings; language: "en" | "zh" } {
+function useStrings(): { strings: TasksSettingsStrings; language: "en" | "zh" | "ja" } {
   const language = useTasksLanguage();
   return { strings: TASKS_SETTINGS_STRINGS[language], language };
 }
@@ -164,7 +164,7 @@ function PreviewCard(props: {
   values: TasksSettings;
   titleLines: TasksForm["titleLines"];
   strings: TasksSettingsStrings;
-  language: "en" | "zh";
+  language: "en" | "zh" | "ja";
   hostId?: string;
 }) {
   const { look, strings, values } = props;

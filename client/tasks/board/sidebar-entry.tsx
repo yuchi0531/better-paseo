@@ -114,9 +114,9 @@ function CountedTasksRow(props: PluginSidebarItemProps & { label: string; mode: 
   const hidden = counts.ready ? (counts.hidden ?? []).filter((card) => props.mode === "all" || card.lane === "needs_input") : [];
   const countsAnchor = useRef<View>(null);
   const hint = [
-    ...(hidden.length ? [language === "zh" ? `${hidden.length} 个被隐藏的任务` : `${hidden.length} hidden ${hidden.length === 1 ? "task" : "tasks"}`] : []),
+    ...(hidden.length ? [language === "zh" ? `${hidden.length} 个被隐藏的任务` : language === "ja" ? `${hidden.length} 件の非表示タスク` : `${hidden.length} hidden ${hidden.length === 1 ? "task" : "tasks"}`] : []),
     sidebarCountText(parts, language),
-  ].filter(Boolean).join(language === "zh" ? "，" : ", ");
+  ].filter(Boolean).join(language === "zh" ? "，" : language === "ja" ? "、" : ", ");
   useLayoutEffect(() => {
     if (Platform.OS !== "web") return;
     const node = countsAnchor.current as unknown as HTMLElement | null;
@@ -139,7 +139,7 @@ function CountedTasksRow(props: PluginSidebarItemProps & { label: string; mode: 
   return <TasksRow {...props} trailing={trailing} />;
 }
 
-function SidebarCountIndicator({ part, theme, language, color }: { part: SidebarCountPart; theme: PluginSidebarItemProps["theme"]; language: "en" | "zh"; color: string }) {
+function SidebarCountIndicator({ part, theme, language, color }: { part: SidebarCountPart; theme: PluginSidebarItemProps["theme"]; language: "en" | "zh" | "ja"; color: string }) {
   const anchor = useRef<View>(null);
   const label = sidebarCountText([part], language);
   useLayoutEffect(() => {

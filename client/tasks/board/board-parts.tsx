@@ -25,11 +25,11 @@ import { withAlpha } from "../../components/theme-tokens";
 const nativeDriver = Platform.OS !== "web";
 
 /** A lane name read top to bottom: Chinese stacks its characters upright, Latin text turns 90°. */
-export function VerticalLabel({ text, color, language }: { text: string; color: string; language: "en" | "zh" }) {
+export function VerticalLabel({ text, color, language }: { text: string; color: string; language: "en" | "zh" | "ja" }) {
   const scale = useTasksFontScale();
   const [length, setLength] = useState(0);
   const style = { fontSize: F.base, fontWeight: "500" as const, color, lineHeight: HOST_LINE.base };
-  if (language === "zh") {
+  if (language === "zh" || language === "ja") {
     return (
       <View style={{ alignItems: "center" }}>
         {Array.from(text).map((char, index) => (

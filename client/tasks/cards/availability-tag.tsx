@@ -19,6 +19,12 @@ const labels: Record<TasksLanguage, Record<TaskIssue["code"], string>> = {
     workspace_unavailable: "工作区已不可用", workspace_archived: "工作区已归档，请先取消归档", project_unavailable: "项目归属不可用", title_settings_invalid: "标题生成配置无效",
     provider_unavailable: "Provider 不可用", model_unavailable: "标题模型不可用",
   },
+  ja: {
+    checking: "可用性を確認中", host_unavailable: "ホストが一時的に利用できません", unsupported: "操作を利用できません", agent_missing: "タスクは存在しません",
+    directory_missing: "作業ディレクトリが見つかりません", directory_not_directory: "作業パスが無効です", directory_inaccessible: "ディレクトリにアクセスできません",
+    workspace_unavailable: "ワークスペースを利用できません", workspace_archived: "ワークスペースはアーカイブ済みです。先にアーカイブ解除してください", project_unavailable: "プロジェクトを利用できません", title_settings_invalid: "タイトル設定が無効です",
+    provider_unavailable: "Provider を利用できません", model_unavailable: "タイトル用モデルを利用できません",
+  },
   en: {
     checking: "Checking availability", host_unavailable: "Host temporarily unavailable", unsupported: "Operation unavailable", agent_missing: "Task no longer exists",
     directory_missing: "Working directory missing", directory_not_directory: "Invalid working path", directory_inaccessible: "Directory inaccessible",
@@ -53,7 +59,7 @@ export function AvailabilityTag(props: { issue: TaskIssue | null | undefined; la
         <Icon name="TriangleAlert" size={15} color={color} />
         <Text style={{ flexShrink: 1, fontSize: F.sm, lineHeight: HOST_LINE.sm, fontWeight: "600", color }}>{label}</Text>
       </Pressable>
-      {expanded || hovered || focused ? <View pointerEvents="none" testID="task-availability-hint" style={expanded ? { marginTop: 4, padding: 8, borderRadius: 6, borderWidth: 1, borderColor: tint.border, backgroundColor: props.tokens.card.background } : { position: "absolute", top: "100%", left: 0, right: 0, padding: 8, ...tipChrome(props.theme) }}><Text style={{ fontSize: F.sm, lineHeight: HOST_LINE.sm, color: props.tokens.foreground }}>{text}{"\n"}{props.language === "zh" ? "相关写操作已禁用；状态恢复后自动重新检查。" : "Affected write actions are disabled; availability is checked again automatically."}</Text></View> : null}
+      {expanded || hovered || focused ? <View pointerEvents="none" testID="task-availability-hint" style={expanded ? { marginTop: 4, padding: 8, borderRadius: 6, borderWidth: 1, borderColor: tint.border, backgroundColor: props.tokens.card.background } : { position: "absolute", top: "100%", left: 0, right: 0, padding: 8, ...tipChrome(props.theme) }}><Text style={{ fontSize: F.sm, lineHeight: HOST_LINE.sm, color: props.tokens.foreground }}>{text}{"\n"}{props.language === "zh" ? "相关写操作已禁用；状态恢复后自动重新检查。" : props.language === "ja" ? "関連する書き込み操作は無効です。状態が回復すると自動的に再確認します。" : "Affected write actions are disabled; availability is checked again automatically."}</Text></View> : null}
     </View>
   );
 }
@@ -66,6 +72,7 @@ export function shownIssue(issue: TaskIssue | null | undefined): TaskIssue | nul
 /** The hint's prose under the reason. */
 const NOTE: Record<TasksLanguage, string> = {
   zh: "相关写操作暂不可用，恢复后自动重新检查。",
+  ja: "書き込み操作は利用できません。可用性は自動的に再確認されます。",
   en: "Write actions are unavailable; availability is checked again automatically.",
 };
 

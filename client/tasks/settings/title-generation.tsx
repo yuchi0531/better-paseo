@@ -20,6 +20,16 @@ const WORDS = {
     saveError: "Settings changed elsewhere or could not be saved. Reloaded the latest.",
     notRecommended: "Not recommended", editPrompt: "Edit prompt", save: "Save", cancel: "Cancel", resetPrompt: "Reset",
   },
+  ja: {
+    afterFirstReply: "新しいタスクのタイトルを自動で最適化", afterFirstReplyHint: "送信内容からタイトルを自動的に調整します。",
+    disableThinking: "タイトル生成の思考を無効化", thinkingHint: "オフまたは対応する最低レベルを使用します。無効の場合はエージェントまたはカスタムのレベルに従います。", automaticThinking: "オフまたは最低対応レベル",
+    customModel: "自動タイトル用モデルを指定", followSource: "オフ: カードのエージェントの Provider・モデル・思考レベルに従います。保存した設定はこのホストのクライアント間で同期されます。",
+    title: "タイトルの自動更新", provider: "Provider", model: "モデル", thinkingOptionId: "思考レベル", modelDefault: "モデル既定", noThinking: "非対応", choose: "選択…", prompt: "プロンプト",
+    tips: [{ label: "生成方法", text: "タイトル生成では、会話の抜粋とタイトル用プロンプトが補助エージェントに送信されます。既定ではカードのエージェントの Provider とモデルを使用し、カスタム時は選択したモデルを使用します。手動生成でも同様に送信されます。" }, { label: "推奨モデル", text: "Oh My Pi / DeepSeek Flash（deepseek/deepseek-flash）、思考レベル low；\nClaude / Haiku 5.5（claude-haiku-5-5）、思考レベル off。このホストで利用可能なモデルを選んでください。" }, { label: "バックグラウンドタスク", text: "タイトル生成のタスクはボードに表示されず、使用後に可能な限り削除されます。ホストの通知が発生する場合があります。" }],
+    resetTitle: "自動タイトル設定をリセット", resetHint: "このセクションの設定のみを復元します。", reset: "タイトル設定をリセット", resetNow: "今すぐリセット", resetCancel: "キャンセル", resetConfirmHint: "自動タイトル設定のみを既定値に戻します。", loading: "読み込み中…", retry: "再試行", refresh: "モデルを更新", loadError: "タイトル設定を読み込めませんでした。",
+    saveError: "設定が別の場所で変更されたか、保存できませんでした。最新の内容を再読み込みしました。",
+    notRecommended: "非推奨", editPrompt: "プロンプトを編集", save: "保存", cancel: "キャンセル", resetPrompt: "リセット",
+  },
   zh: {
     afterFirstReply: "自动优化新任务标题", afterFirstReplyHint: "自动根据发送的内容优化标题。",
     disableThinking: "关闭标题生成思考模式", thinkingHint: "关闭思考或使用最低支持等级；关闭此开关则跟随 agent 或自定义等级。", automaticThinking: "关闭或最低支持等级",
