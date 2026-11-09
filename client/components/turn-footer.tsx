@@ -47,9 +47,13 @@ interface AssistantFooterProps {
   tokens: ExtendedThemeTokens;
   /** `layout.compact`: a 44pt touch target for Copy. */
   compact?: boolean;
+  /** Branch this conversation into a parallel agent, as the host footer does. */
+  onFork?: () => void;
+  /** A fork is being created; the button ignores extra presses. */
+  forking?: boolean;
 }
 
-export function AssistantFooter({ text, at, agentName, modelId, modelName, thinkingLabel, durationMs, startedAt, usage, tokens, compact = false }: AssistantFooterProps) {
+export function AssistantFooter({ text, at, agentName, modelId, modelName, thinkingLabel, durationMs, startedAt, usage, tokens, compact = false, onFork, forking = false }: AssistantFooterProps) {
   // The shared copy path (plan §3.8): a check for 1.2 s on success, a toast
   // on failure, and no timer left running after unmount.
   const { copied, copy } = useCopy();
@@ -159,6 +163,22 @@ export function AssistantFooter({ text, at, agentName, modelId, modelName, think
           />
           <Text style={styles.copyLabel}>{toolbarLabel("Copy", language)}</Text>
         </ToolbarItem>
+        {onFork ? (
+          <ToolbarItem
+            onLayout={compact ? measure.fork : undefined}
+            label="Fork"
+            tokens={tokens}
+            align="start"
+            accessibilityLabel="Fork this chat"
+            onPress={onFork}
+            disabled={forking}
+            hitSlop={compact ? (44 - FOOTER_HEIGHT) / 2 : 0}
+            buttonStyle={styles.copyButton}
+          >
+            <Icon name="GitFork" size={DISCLOSURE_HEADER.icon} color={tokens.foregroundMuted} />
+            <Text style={styles.copyLabel}>{toolbarLabel("Fork", language)}</Text>
+          </ToolbarItem>
+        ) : null}
         {modelName && fit.model ? (
           <ToolbarItem
             onLayout={compact ? measure.model : undefined}
@@ -215,7 +235,7 @@ const FOOTER_HEIGHT = 24;
 /** A replayed Grok or Cursor turn spans under this; a live model turn never does. */
 const REPLAY_COLLAPSE_MS = 1_000;
 
-type FooterSlot = "copy" | "model" | "clock" | "duration";
+type FooterSlot = "copy" | "fork" | "model" | "clock" | "duration";
 export interface FooterFit { model: boolean; clock: boolean }
 
 /**
@@ -230,8 +250,8 @@ export function fitOneLine(widths: Partial<Record<FooterSlot, number>>, row: num
   };
   // Half a point of rounding must not drop an item that fits.
   const fits = (slots: readonly FooterSlot[]) => span(slots) <= row + 0.5;
-  if (fits(["copy", "model", "clock", "duration"])) return { model: true, clock: true };
-  if (fits(["copy", "model", "duration"])) return { model: true, clock: false };
+  if (fits(["copy", "fork", "model", "clock", "duration"])) return { model: true, clock: true };
+  if (fits(["copy", "fork", "model", "duration"])) return { model: true, clock: false };
   return { model: false, clock: false };
 }
 
@@ -248,7 +268,7 @@ function useOneLineFit(compact: boolean, hasModel: boolean, hasDuration: boolean
       const width = event.nativeEvent.layout.width;
       setWidths((previous) => previous[name] === width ? previous : { ...previous, [name]: width });
     };
-    return { row: slot("row"), copy: slot("copy"), model: slot("model"), clock: slot("clock"), duration: slot("duration") };
+    return { row: slot("row"), copy: slot("copy"), fork: slot("fork"), model: slot("model"), clock: slot("clock"), duration: slot("duration") };
   }, []);
   const { row, model, duration, ...rest } = widths;
   const fit = compact && row ? fitOneLine({ ...rest, ...(hasModel ? { model } : {}), ...(hasDuration ? { duration } : {}) },

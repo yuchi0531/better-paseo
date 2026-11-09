@@ -691,11 +691,48 @@ function CompletedReplyFooter({ agentId, text, at, tokens, compact, durationMs, 
   const modelId = useAgent(agentId, (agent) => agent.model);
   const thinkingOptionId = useAgent(agentId, (agent) => agent.thinkingOptionId);
   const cwd = useAgent(agentId, (agent) => agent.cwd);
+  const workspaceId = useAgent(agentId, (agent) => agent.workspaceId);
+  const agentTitle = useAgent(agentId, (agent) => agent.title);
   const paseo = usePaseo();
   const model = useFooterModel(paseo, agentName, modelId, thinkingOptionId, cwd);
+  const [forking, setForking] = useState(false);
+  // The plugin SDK exposes no host fork RPC, so fork the way /fork does: copy
+  // the transcript and start a parallel agent with it as a text attachment.
+  const fork = useCallback(async () => {
+    if (!workspaceId || forking) return;
+    setForking(true);
+    try {
+      const page = await paseo.agents.ref(agentId).timeline.refetch({ direction: "tail", limit: 200, projection: "canonical" });
+      const lines: string[] = [];
+      const cutoff = at.getTime();
+      for (const entry of page.entries) {
+        const stamp = Date.parse(entry.timestamp);
+        if (Number.isFinite(stamp) && stamp > cutoff) break;
+        const item = entry.item;
+        if (item.type === "user_message") lines.push(`User: ${item.text}`);
+        else if (item.type === "assistant_message") lines.push(`Assistant: ${item.text}`);
+      }
+      const title = agentTitle ?? agentId;
+      await paseo.workspaces.ref(workspaceId).agents.create({
+        config: { provider: modelId ? `${agentName}/${modelId}` : agentName },
+        title: `Fork · ${title}`,
+        attachments: [{
+          type: "text",
+          mimeType: "text/plain",
+          title: `Transcript · ${title}`,
+          text: lines.join("\n\n"),
+        }],
+      });
+    } catch (error) {
+      console.error("[better-paseo] fork failed", error);
+    } finally {
+      setForking(false);
+    }
+  }, [paseo, agentId, workspaceId, agentName, modelId, agentTitle, at, forking]);
   return <AssistantFooter text={text} at={at} agentName={agentName} modelId={modelId} modelName={model.modelName}
     thinkingLabel={model.thinkingLabel}
-    durationMs={durationMs} startedAt={startedAt} usage={usage} tokens={tokens} compact={compact} />;
+    durationMs={durationMs} startedAt={startedAt} usage={usage} tokens={tokens} compact={compact}
+    onFork={fork} forking={forking} />;
 }
 
 /**
